@@ -1,0 +1,14 @@
+# The directory the note is written to. The end-to-end tests set it to a
+# temporary directory.
+variable "directory" {
+  default = "./out"
+}
+
+# The file name comes from note_filename, a function the plugin offers:
+# "Greeting" becomes greeting.txt. Functions are evaluated while the
+# configuration is read, so the provider only ever sees the resulting name.
+notes "note" "greeting" {
+  directory = variable.directory
+  name      = note_filename("Greeting")
+  content   = "Hello from xcl"
+}
