@@ -1,4 +1,4 @@
-// Package stateonly reads what the notes plugin applied as an application
+// Package stateonly reads what the test plugin applied as an application
 // that imports only the entities package would: it never imports the plugin,
 // its providers or its clients, only the block type.
 package stateonly
@@ -15,7 +15,7 @@ import (
 	"github.com/jumppad-labs/xcl"
 	"github.com/jumppad-labs/xcl/registry"
 
-	"github.com/jumppad-labs/xcl-plugin-template/entities"
+	"github.com/jumppad-labs/xcl-plugin-test/entities"
 )
 
 // basicExample is the directory holding the sample configuration the test
@@ -27,15 +27,15 @@ const basicExample = "../../examples/basic"
 var pluginBinary string
 
 func TestMain(m *testing.M) {
-	buildDir, err := os.MkdirTemp("", "xcl-plugin-template-stateonly")
+	buildDir, err := os.MkdirTemp("", "xcl-plugin-test-stateonly")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "unable to create build directory: %s\n", err)
 		os.Exit(1)
 	}
 
-	pluginBinary = filepath.Join(buildDir, "xcl-plugin-template")
+	pluginBinary = filepath.Join(buildDir, "xcl-plugin-test")
 
-	build := exec.Command("go", "build", "-o", pluginBinary, "../../cmd/notes")
+	build := exec.Command("go", "build", "-o", pluginBinary, "../../cmd/xcl-plugin-test")
 	build.Stdout = os.Stdout
 	build.Stderr = os.Stderr
 
@@ -52,9 +52,9 @@ func TestMain(m *testing.M) {
 }
 
 // newConfig returns a Config with the plugin program TestMain built
-// registered as an external plugin, keeping its state in stateDir and writing
-// notes to outDir
-func newConfig(t *testing.T, stateDir string, outDir string) *xcl.Config {
+// registered as an external plugin, keeping its state in stateDir and
+// recording operations to logPath
+func newConfig(t *testing.T, stateDir string, logPath string) *xcl.Config {
 	t.Helper()
 
 	local := registry.NewLocal()
@@ -63,18 +63,18 @@ func newConfig(t *testing.T, stateDir string, outDir string) *xcl.Config {
 	c, err := xcl.NewConfig(
 		xcl.WithRegistry(local),
 		xcl.WithStatePath(stateDir),
-		xcl.WithVariables(map[string]any{"directory": outDir}),
+		xcl.WithVariables(map[string]any{"log": logPath}),
 	)
 	require.NoError(t, err)
 
 	return c
 }
 
-func TestStateReaderReadsAppliedNotesIntoTheEntityType(t *testing.T) {
+func TestStateReaderReadsAppliedItemsIntoTheEntityType(t *testing.T) {
 	stateDir := t.TempDir()
-	outDir := t.TempDir()
+	logPath := filepath.Join(t.TempDir(), "ops.jsonl")
 
-	applier := newConfig(t, stateDir, outDir)
+	applier := newConfig(t, stateDir, logPath)
 
 	// register the destroy before applying, so a partly applied
 	// configuration is removed too
@@ -87,17 +87,19 @@ func TestStateReaderReadsAppliedNotesIntoTheEntityType(t *testing.T) {
 
 	// a separate Config on the same state, as another program reading what
 	// was applied would be
-	reader := newConfig(t, stateDir, outDir)
+	reader := newConfig(t, stateDir, logPath)
 
 	err = reader.Load()
 	require.NoError(t, err)
 
-	found, err := xcl.FindByType[entities.Note](reader, "notes", "note")
+	found, err := xcl.FindByType[entities.Item](reader, "test", "item")
 	require.NoError(t, err)
-	require.Len(t, found, 1)
+	require.Len(t, found, 2)
 
-	note := found[0]
-	require.Equal(t, "greeting.txt", note.Name)
-	require.Equal(t, "Hello from xcl", note.Content)
-	require.Equal(t, filepath.Join(outDir, "greeting.txt"), note.Path)
+	outputs := map[string]string{}
+	for _, item := range found {
+		outputs[item.Meta.Name] = item.Output
+	}
+
+	require.Equal(t, map[string]string{"first": "first-one", "second": "second-two"}, outputs)
 }

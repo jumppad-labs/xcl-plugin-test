@@ -1,8 +1,8 @@
 # Runs the suite against the latest xcl release once a week, so a release
-# that breaks the template shows up without anyone looking for it.
+# that breaks the test plugin shows up without anyone looking for it.
 #
-# When this fails, the latest xcl release breaks the template: update the
-# template to it.
+# When this fails, the latest xcl release breaks the test plugin: update it
+# to that release.
 name: Latest xcl
 
 on:

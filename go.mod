@@ -1,9 +1,9 @@
-module github.com/jumppad-labs/xcl-plugin-template
+module github.com/jumppad-labs/xcl-plugin-test
 
 go 1.25.0
 
 require (
-	github.com/jumppad-labs/xcl v0.3.0
+	github.com/jumppad-labs/xcl v0.5.3
 	github.com/stretchr/testify v1.10.0
 )
 

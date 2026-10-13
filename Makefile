@@ -2,10 +2,9 @@
 # from the repository root.
 
 # PLUGIN is the plugin's name: the name of its binary and of every release
-# asset. It must match the name of your repository, because the GitHub
-# registry installs a plugin by its repository name. Change it when you make
-# the template your own.
-PLUGIN := xcl-plugin-template
+# asset. It matches the repository's name, because the GitHub registry
+# installs a plugin by its repository name.
+PLUGIN := xcl-plugin-test
 
 BUILD_DIR := build
 DIST_DIR := dist
@@ -35,7 +34,7 @@ STATICCHECK := go run honnef.co/go/tools/cmd/staticcheck@v0.8.1
 # Build every package, and the plugin program as build/$(PLUGIN)
 build:
 	go build ./...
-	go build -o $(BUILD_DIR)/$(PLUGIN) ./cmd/notes
+	go build -o $(BUILD_DIR)/$(PLUGIN) ./cmd/xcl-plugin-test
 
 # Run the unit and end-to-end tests. Nothing else needs to be running.
 test:
@@ -51,13 +50,14 @@ lint:
 generate:
 	$(MOCKERY)
 
-# Apply the sample, plan it again with no changes and destroy it, with the
-# plugin registered in-process: imported and run inside the application
+# Apply the sample, plan it again with no changes, update it and destroy it,
+# with the plugin registered in-process: imported and run inside the
+# application
 inprocess:
 	go test -v -count=1 -run TestInProcess ./e2e
 
-# Apply the sample, plan it again with no changes and destroy it, with the
-# plugin built and run as a separate plugin program
+# Apply the sample, plan it again with no changes, update it and destroy it,
+# with the plugin built and run as a separate plugin program
 external:
 	go test -v -count=1 -run TestExternal ./e2e
 
@@ -74,7 +74,7 @@ dist: check-version
 		ext=""; if [ "$$os" = "windows" ]; then ext=".exe"; fi; \
 		stage="$(DIST_DIR)/stage/$$platform"; \
 		echo "building $$os/$$arch"; \
-		CGO_ENABLED=0 GOOS=$$os GOARCH=$$arch go build -trimpath -o "$$stage/$(PLUGIN)$$ext" ./cmd/notes; \
+		CGO_ENABLED=0 GOOS=$$os GOARCH=$$arch go build -trimpath -o "$$stage/$(PLUGIN)$$ext" ./cmd/xcl-plugin-test; \
 		cp README.md LICENSE "$$stage/"; \
 		archive="$(PLUGIN)_$(DIST_VERSION)_$$platform"; \
 		if [ "$$os" = "windows" ]; then \

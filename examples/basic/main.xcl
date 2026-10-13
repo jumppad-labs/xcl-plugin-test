@@ -1,14 +1,20 @@
-# The directory the note is written to. The end-to-end tests set it to a
-# temporary directory.
-variable "directory" {
-  default = "./out"
+# The operation log both items record to. The end-to-end tests set it to a
+# file in a temporary directory.
+variable "log" {
+  default = "./ops.jsonl"
 }
 
-# The file name comes from note_filename, a function the plugin offers:
-# "Greeting" becomes greeting.txt. Functions are evaluated while the
-# configuration is read, so the provider only ever sees the resulting name.
-notes "note" "greeting" {
-  directory = variable.directory
-  name      = note_filename("Greeting")
-  content   = "Hello from xcl"
+# first holds a sensitive secret, which xcl masks in events and state
+test "item" "first" {
+  log    = variable.log
+  value  = "one"
+  secret = "hunter2"
+}
+
+# second takes first's computed output as its input, so it depends on first:
+# it is created after first and destroyed before it
+test "item" "second" {
+  log   = variable.log
+  value = "two"
+  input = test.item.first.output
 }
