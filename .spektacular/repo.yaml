@@ -1,0 +1,22 @@
+schema: 2
+written_by: dev
+description: A test-only xcl plugin, generated from the xcl-plugin-template GitHub template and published as signed GitHub releases, used by xcl-python end-to-end and GitHub-registry tests in place of the Docker plugin.
+role: test plugin
+tags:
+    - go
+    - xcl
+    - plugin
+    - testing
+    - github-releases
+source:
+    provider: file
+    config:
+        location: ..
+knowledge:
+    provider: file
+    config:
+        location: knowledge
+changelog:
+    provider: file
+    config:
+        directory: changelog
