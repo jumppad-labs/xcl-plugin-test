@@ -1,7 +1,7 @@
 # Mockery v3 configuration, run with `make generate`. It generates a strict
 # double of each client interface into a mocks package beside it. The provider
-# unit tests use the double of client/files in place of the real disk, so any
-# call the test does not expect fails it.
+# unit tests use the double of client/oplog in place of the real log file, so
+# any call the test does not expect fails it.
 #
 # When you add a client package, add its interfaces under packages and run
 # `make generate`.
@@ -13,6 +13,6 @@ template: testify
 template-data:
   unroll-variadic: true
 packages:
-  github.com/jumppad-labs/xcl-plugin-template/client/files:
+  github.com/jumppad-labs/xcl-plugin-test/client/oplog:
     interfaces:
-      Files: {}
+      OperationLog: {}

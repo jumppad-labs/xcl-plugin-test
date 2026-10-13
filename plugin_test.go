@@ -1,4 +1,4 @@
-package notes
+package testplugin
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 	"github.com/jumppad-labs/xcl/logger"
 )
 
-func TestInitRegistersTheNoteType(t *testing.T) {
+func TestInitRegistersTheItemType(t *testing.T) {
 	directory := t.TempDir()
 	t.Chdir(directory)
 
@@ -20,8 +20,8 @@ func TestInitRegistersTheNoteType(t *testing.T) {
 
 	registered := p.GetTypes()
 	require.Len(t, registered, 1)
-	require.Equal(t, "notes", registered[0].Type)
-	require.Equal(t, "note", registered[0].SubType)
+	require.Equal(t, "test", registered[0].Type)
+	require.Equal(t, "item", registered[0].SubType)
 
 	entries, err := os.ReadDir(directory)
 	require.NoError(t, err)

@@ -38,8 +38,8 @@ github.com/infinytum/raymond/v2 v2.0.5 h1:sdbPMfhNnNI9c5gxDPfbgoFYlwTgg4UlSjxqvY
 github.com/infinytum/raymond/v2 v2.0.5/go.mod h1:XWq3aImVLUPbCm+hFxmqjIMaBm10z+WjtxLtR0P8oVs=
 github.com/jhump/protoreflect v1.15.1 h1:HUMERORf3I3ZdX05WaQ6MIpd/NJ434hTp5YiKgfCL6c=
 github.com/jhump/protoreflect v1.15.1/go.mod h1:jD/2GMKKE6OqX8qTjhADU1e6DShO+gavG9e0Q693nKo=
-github.com/jumppad-labs/xcl v0.3.0 h1:KY4ieJfN/W7Ea4vfXk8BXqci8qSbBZXPikaVQArHQPU=
-github.com/jumppad-labs/xcl v0.3.0/go.mod h1:jJR7tIejr+JvROrLG7Mfzbg7UFzOPSu3HedX1hNsBU0=
+github.com/jumppad-labs/xcl v0.5.3 h1:sr5S/nn9CI0O38sJc8EPjSKoEe8+iKbY9tF2E2lqfz4=
+github.com/jumppad-labs/xcl v0.5.3/go.mod h1:jJR7tIejr+JvROrLG7Mfzbg7UFzOPSu3HedX1hNsBU0=
 github.com/mattn/go-colorable v0.1.4 h1:snbPLB8fVfU9iwbbo30TPtbLRzwWu6aJS6Xh4eaaviA=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
