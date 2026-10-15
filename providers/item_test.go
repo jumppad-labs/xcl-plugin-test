@@ -19,9 +19,7 @@ import (
 
 func testItem() *entities.Item {
 	return &entities.Item{
-		ResourceBase: types.ResourceBase{
-			Meta: types.Meta{ID: "test.item.first", Name: "first", Type: "test"},
-		},
+		Meta:  types.Meta{ID: "test.item.first", Name: "first", Type: "test"},
 		Log:   "ops.jsonl",
 		Value: "one",
 	}

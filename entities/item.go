@@ -23,7 +23,9 @@ import "github.com/jumppad-labs/xcl/types"
 //	  input = test.item.first.output
 //	}
 type Item struct {
-	types.ResourceBase `xcl:",remain"`
+	// Meta is the item's metadata, filled by xcl: Meta.Name is its label,
+	// "first" above, and Meta.ID its address
+	Meta types.Meta
 
 	// Log is the path of the JSON-lines file every operation on the item
 	// appends its record to, before the operation does its work.
