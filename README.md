@@ -9,7 +9,7 @@ plugin program. It needs no outside service, so it runs the same on every
 platform.
 
 It is not an example to copy. To write a plugin, start from
-[xcl-plugin-template](https://github.com/jumppad-labs/xcl-plugin-template); for
+[xcl-plugin-template-go](https://github.com/jumppad-labs/xcl-plugin-template-go); for
 a worked plugin for a real backend, see
 [xcl-plugin-docker](https://github.com/jumppad-labs/xcl-plugin-docker). This
 plugin keeps the template's layout, so it is built, tested and released the
@@ -80,7 +80,7 @@ make build      # build every package and build/xcl-plugin-test
 make test       # unit and end-to-end tests
 make lint       # go vet, gofmt and staticcheck
 make generate   # regenerate the Mockery double
-make dist VERSION=v0.1.0   # release archives and checksums in dist/
+make dist VERSION=v0.1.0   # release zips and index in dist/
 ```
 
 ## Releasing
@@ -92,11 +92,15 @@ make release VERSION=v0.1.0
 ```
 
 This tags the commit and pushes the tag. The release workflow then runs the
-tests, builds an archive per platform (`xcl-plugin-test_<version>_<os>_<arch>.tar.gz`,
-`.zip` on Windows), writes `xcl-plugin-test_<version>_checksums.txt`, signs it
-with the jumppad-labs release key into `xcl-plugin-test_<version>_checksums.txt.sig`,
-and publishes the release. It needs the `GPG_PRIVATE_KEY` and `GPG_PASSPHRASE`
-repository secrets.
+tests and builds a zip per platform, `xcl-plugin-test-<version>-<os>-<arch>.zip`,
+holding the binary (`.exe` on Windows), `README.md`, `LICENSE` and the build's
+`xcl-plugin.xcl` manifest. It writes `xcl-plugin-test-<version>-index.xcl`,
+which lists every zip with its `sha256:` checksum, signs the index with the
+jumppad-labs release key into `xcl-plugin-test-<version>-index.xcl.sig`, and
+publishes the release. It needs the `GPG_PRIVATE_KEY` and `GPG_PASSPHRASE`
+repository secrets. Installing a release needs xcl v0.13.1 or later, the first
+whose GitHub registry finds a `-`-separated index; releases up to v0.2.0 use
+the old layout, which xcl v0.13.0 and later no longer install.
 
 The xcl bindings pin the version they install; bumping it is a change in each
 binding, for xcl-python `tests/plugins.toml`.
